@@ -40,12 +40,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: refs/pull/${{ github.event.issue.number }}/head
+          ref: ${{ steps.get-branch.outputs.branch }}
       - uses: actions/github-script@v7
         with:
           script: |
-            const unfinishedChecklist = context.comment.body.match(/- \[ \] (.+)/g))
-            .filter(checklistItem => !checklistItem.includes('[x]'));
+            const unfinishedChecklist = context.comment.body.match(/- \[ \] (.+)/g)
+              .filter(checklistItem => !checklistItem.includes('[x]'));
 
             if (unfinishedChecklist.length > 0) {
               core.setFailed(`Unfinished checklist items found:\n${unfinishedChecklist.join('\n')}`);
