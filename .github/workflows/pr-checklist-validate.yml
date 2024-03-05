@@ -1,7 +1,11 @@
 name: PR Checklist Validate
 on:
   issue_comment:
-    types: [created, edited]
+    types: [edited]
+
+concurrency:
+  group: ${{ github.event.comment.id }}
+  cancel-in-progress: true
 
 jobs:
   validate-comment:
