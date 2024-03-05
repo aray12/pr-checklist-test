@@ -22,7 +22,6 @@ jobs:
       - uses: actions/github-script@v7
         with:
           script: |
-            console.log(JSON.stringify(context.payload, null, 2))
             const unfinishedChecklist = context.payload.comment.body.match(/- \[ \] (.+)/g)
               .filter(checklistItem => !checklistItem.includes('[x]'));
 
@@ -37,9 +36,9 @@ jobs:
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              sha: ${{ steps.get-sha.outputs.sha }},
-              state: ${{ job.status }},
+              sha: '${{ steps.get-sha.outputs.sha }}',
+              state: '${{ job.status }}',
               // target_url: inputs.targetUrl,
-              description: "Test",
+              description: 'Test',
               // context: inputs.context,
             });
