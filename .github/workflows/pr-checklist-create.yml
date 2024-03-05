@@ -24,3 +24,13 @@ jobs:
             - [ ] Did you file any followup tickets that need to be filed?
               `
             })
+
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: '${{ github.event.pull_request.base.sha }}',
+              state: 'failure',
+              target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
+              description: 'Make sure you have completed the PR Checklist',
+              context: 'PR Checklist Validate',
+            });
