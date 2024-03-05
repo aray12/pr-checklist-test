@@ -20,7 +20,7 @@ jobs:
               repo: context.repo.repo,
               body: `
             <!-- PR CHECKLIST -->
-            - [ ] Does your PR title include the JIRA ticket number? (e.g., INT-1234)
+            - [ ] Does your PR title include the JIRA ticket number?
             - [ ] Did you write all the tests that need to be written for this change?
             - [ ] Is everything that should be wrapped in a feature flag properly gated?
             - [ ] Did you file any followup tickets that need to be filed?
