@@ -22,7 +22,7 @@ jobs:
               core.setFailed();
               await core.summary
                 .addHeading('Unfinished checklist items found:')
-                .addRaw(unfinishedChecklist.join('\n'))
+                .addList(unfinishedChecklist)
                 .write();
             }
       - name: Set latest commit status as ${{ job.status }}
