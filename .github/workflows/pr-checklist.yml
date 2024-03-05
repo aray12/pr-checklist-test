@@ -1,0 +1,51 @@
+name: PR Checklist
+on:
+  pull_request:
+    types: [opened]
+
+  issue_comment:
+    types: [edited]
+
+jobs:
+  create-comment:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `
+            <!-- PR CHECKLIST -->
+            - [ ] Does your PR title include the JIRA ticket number? (e.g., INT-1234)
+            - [ ] Did you write all the tests that need to be written for this change?
+            - [ ] Is everything that should be wrapped in a feature flag properly gated?
+            - [ ] Did you file any followup tickets that need to be filed?
+              `
+            })
+  check-comment:
+    if: github.event_name == 'issue_comment' && github.event.issue.pull_request && github.event.issue.state == 'open' && contains(github.event.comment.body, '<!-- PR CHECKLIST -->')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const comments = await github.rest.issues.listComments({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+
+            const unfinishedChecklist = comments.data
+              .map(comment => comment.body.match(/- \[ \] (.+)/g))
+              .flat()
+            //  .filter(checklistItem => !checklistItem.includes('[x]'));
+
+            console.log(JSON.stringify(unfinishedChecklist, null, 2))
+
+            if (unfinishedChecklist.length > 0) {
+              core.setFailed(`Unfinished checklist items found:\n${unfinishedChecklist.join('\n')}`);
+            }
