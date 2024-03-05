@@ -1,7 +1,7 @@
 name: PR Checklist Validate
 on:
   issue_comment:
-    types: [edited]
+    types: [created, edited]
 
 jobs:
   validate-comment:
