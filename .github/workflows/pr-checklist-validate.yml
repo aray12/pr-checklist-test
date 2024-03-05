@@ -19,8 +19,11 @@ jobs:
             const unfinishedChecklist = context.payload.comment.body.match(/- \[ \] (.+)/g) ?? []
 
             if (unfinishedChecklist.length > 0) {
-              core.setFailed('Unfinished checklist items found:');
-              await core.summary.addRaw(unfinishedChecklist.join('\n')).write();
+              core.setFailed();
+              await core.summary
+                .addHeading('Unfinished checklist items found:')
+                .addRaw(unfinishedChecklist.join('\n'))
+                .write();
             }
       - name: Set latest commit status as ${{ job.status }}
         uses: actions/github-script@v7
