@@ -38,7 +38,7 @@ jobs:
               repo: context.repo.repo,
               sha: '${{ steps.get-sha.outputs.sha }}',
               state: '${{ job.status }}',
-              // target_url: inputs.targetUrl,
-              description: 'Test',
-              // context: inputs.context,
+              target_url: '${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}',
+              description: 'Make sure you have completed the PR Checklist',
+              context: '${{ github.workflow }}',
             });
